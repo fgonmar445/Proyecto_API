@@ -127,7 +127,7 @@ json
 
 
 ## 📌 DELETE /api/mascotas/{id} — Eliminar una mascota
-Elimina una mascota del usuario autenticado.
+Elimina una mascota del usuario autenticado.<br>
 <img src="./images/delete_mascotas.png">
 
 ---
