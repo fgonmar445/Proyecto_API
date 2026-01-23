@@ -81,6 +81,8 @@ Al crear un usuario mediante la ruta http://127.0.0.1:8000/api/register nos devu
 
 Lo necesitamos para interactuar como usuario autenticado en Postman y poder recrear las distintas acciones.
 
+---
+
 ## Peticion POST de Mascotas 
 
 <img src="./images/toby.png">
