@@ -85,6 +85,10 @@ Lo necesitamos para interactuar como usuario autenticado en Postman y poder recr
 
 ## Peticion POST de Mascotas 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f1c6225413f62bb767d054e3b19c322249ebe08e
 <img src="./images/kira.png">
 
 ## Peticion GET Mascotas
