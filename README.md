@@ -85,7 +85,6 @@ Lo necesitamos para interactuar como usuario autenticado en Postman y poder recr
 
 ## Peticion POST de Mascotas 
 
-<img src="./images/toby.png">
 <img src="./images/kira.png">
 
 ## Peticion GET Mascotas
