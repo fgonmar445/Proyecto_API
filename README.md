@@ -15,8 +15,8 @@ Proyecto completo con autenticación, CRUD de Mascotas y Posts, y filtrado avanz
 ## 📦 Instalación
 
 ```
-git clone <tu-repo>
-cd <tu-proyecto>
+git clone https://github.com/fgonmar445/Proyecto_API
+cd proyecto_api
 composer install
 cp .env.example .env
 php artisan key:generate
