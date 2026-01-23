@@ -83,17 +83,209 @@ Lo necesitamos para interactuar como usuario autenticado en Postman y poder recr
 
 ---
 
-## Peticion POST de Mascotas 
+# CRUD de Mascotas documentado (con capturas)
+La API incluye un CRUD completo para la gestión de Mascotas. Todas las rutas están protegidas mediante Laravel Sanctum, por lo que es necesario enviar un token válido en cada petición.
+
+
+## 📌 POST /api/mascotas — Crear una mascota
+Permite registrar una nueva mascota asociada al usuario autenticado.
+
+Ejemplo JSON:
+```
+json
+{
+  "nombre": "Toby",
+  "edad": 3,
+  "especie": "Perro",
+  "peso": 10.2,
+  "vacunado": true
+}
+```
 <img src="./images/toby.png">
 <img src="./images/kira.png">
 
-## Peticion GET Mascotas
+
+## 📌 GET /api/mascotas — Listar mascotas
+Devuelve todas las mascotas registradas por el usuario autenticado
 <img src="./images/get_mascotas.png">
 
-## Actualizacion datos con peticion PUT
 
+## 📌 PUT /api/mascotas/{id} — Actualizar una mascota
+
+Permite modificar los datos de una mascota existente.
+
+Ejemplo JSON:
+```
+json
+{
+  "nombre": "Toby Actualizado",
+  "edad": 4,
+  "especie": "Perro",
+  "peso": 11.0,
+  "vacunado": true
+}
+```
 <img src="./images/mascotas_put.png">
 
-## Peticion DELETE
 
+## 📌 DELETE /api/mascotas/{id} — Eliminar una mascota
+Elimina una mascota del usuario autenticado.
 <img src="./images/delete_mascotas.png">
+
+---
+
+# 🧱 2. Descripción de la Arquitectura del Proyecto
+Este proyecto sigue la arquitectura estándar de Laravel, organizada en capas que separan la lógica de negocio, el acceso a datos y la gestión de rutas. A continuación se detalla cada parte clave:
+
+## 📂 Estructura de carpetas
+Laravel organiza el proyecto en módulos bien definidos:
+
+- app/ → Contiene la lógica principal del backend.
+
+- Models/ → Modelos Eloquent que representan tablas de la base de datos.
+
+- Http/Controllers/ → Controladores que gestionan las peticiones.
+
+- Http/Middleware/ → Filtros que se ejecutan antes o después de cada petición.
+
+- routes/api.php → Archivo donde se definen las rutas de la API.
+
+- database/migrations/ → Migraciones que crean y modifican tablas.
+
+- config/ → Archivos de configuración del framework y paquetes (incluido Sanctum).
+
+Esta estructura permite mantener el código limpio, escalable y fácil de mantener.
+
+
+
+## 🎮 Uso de Controladores
+Los controladores se encargan de procesar las peticiones HTTP y devolver respuestas JSON.
+
+En este proyecto se utilizan:
+
+- AuthController → Registro, login y gestión del token.
+
+- MascotaController → CRUD completo de Mascotas.
+
+- PostController → CRUD completo de Posts.
+
+- UserController → Listado y filtrado de usuarios.
+
+Cada controlador sigue el patrón RESTful, utilizando métodos como:
+
+- index() → listar
+
+- store() → crear
+
+- show() → mostrar
+
+- update() → actualizar
+
+- destroy() → eliminar
+
+Esto garantiza una API ordenada y fácil de consumir.
+
+
+
+## 🧬 Modelos
+Los modelos representan las tablas de la base de datos y permiten interactuar con ellas mediante Eloquent ORM.
+
+Modelos utilizados:
+
+- User → Usuarios autenticados.
+
+- Mascota → Mascotas asociadas a un usuario.
+
+- Post → Publicaciones creadas por un usuario.
+
+Cada modelo define:
+
+- Sus atributos
+
+- Sus relaciones (por ejemplo, User tiene muchas Mascotas y muchos Posts)
+
+- Sus reglas de asignación masiva ($fillable)
+
+Ejemplo de relación:
+```
+php
+public function mascotas()
+{
+    return $this->hasMany(Mascota::class);
+}
+```
+
+
+## 🧵 Middleware
+El middleware actúa como un filtro entre la petición y la respuesta.
+
+En este proyecto se usa principalmente:
+
+- auth:sanctum → Protege rutas que requieren autenticación.
+
+- EnsureFrontendRequestsAreStateful → Maneja sesiones seguras cuando se usa Sanctum.
+
+Gracias a esto, solo los usuarios autenticados pueden acceder a:
+
+- Mascotas
+
+- Posts
+
+- Datos del usuario
+
+## 🔐 Sanctum
+Laravel Sanctum se utiliza para:
+
+- Generar tokens personales
+
+- Proteger rutas de la API
+
+- Asociar recursos al usuario autenticado
+
+Cuando un usuario se registra o inicia sesión, se genera un token:
+```
+php
+$token = $user->createToken('auth_token')->plainTextToken;
+```
+
+Este token se envía en Postman mediante:
+
+Código
+Authorization: Bearer TOKEN_AQUI
+Sanctum permite una autenticación ligera, segura y perfecta para APIs REST.
+
+---
+# ⭐ 3. Validaciones usadas en los controladores
+La API implementa un sistema de validación sólido en cada uno de los controladores para garantizar que los datos enviados por el cliente sean correctos antes de procesarlos. Esto evita errores, asegura la integridad de la información y protege la base de datos frente a entradas no deseadas o mal formadas.
+
+Laravel proporciona el método validate() que permite definir reglas específicas para cada campo. Estas validaciones se ejecutan automáticamente antes de crear o actualizar un recurso, y en caso de fallo devuelven una respuesta JSON con código 422 Unprocessable Entity, indicando qué campos no cumplen los requisitos.
+
+Las validaciones aplicadas incluyen:
+
+- Tipos de datos (string, integer, numeric, boolean)
+
+- Campos obligatorios mediante required
+
+- Longitudes máximas con max:255
+
+- Valores mínimos como min:0
+
+- Formato correcto de email
+
+- Confirmación de contraseñas
+
+- Validación de relaciones (IDs existentes)
+
+Ejemplo real de validación en el controlador de Mascotas:
+
+```
+php
+$request->validate([
+    'nombre' => 'required|string|max:255',
+    'edad' => 'required|integer|min:0',
+    'especie' => 'required|string',
+    'peso' => 'required|numeric|min:0',
+    'vacunado' => 'required|boolean'
+]);
+```
+Este enfoque garantiza que solo se procesen datos válidos y consistentes, reforzando la seguridad y fiabilidad de la API.
