@@ -1,16 +1,15 @@
 # API REST con Laravel 12 + Sanctum  
-Proyecto completo con autenticación, CRUD de Mascotas y Posts, y filtrado avanzado.
+Proyecto completo con autenticación, CRUD de Mascotas y Posts.
 
----
+
 
 ## 🚀 Requisitos
 - PHP 8.2+
 - Composer
-- MySQL / MariaDB
-- Laravel 11
+- MySQL
+- Laravel 12
 - Postman
 
----
 
 ## 📦 Instalación
 
@@ -22,7 +21,6 @@ cp .env.example .env
 php artisan key:generate
 ```
 
----
 
 ## ⚙️ Configura tu base de datos en .env
 ```
@@ -31,7 +29,6 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
----
 
 ## 🔐 Instalación de Laravel Sanctum
 ```
@@ -91,6 +88,7 @@ La API incluye un CRUD completo para la gestión de Mascotas. Todas las rutas es
 Permite registrar una nueva mascota asociada al usuario autenticado.
 
 Ejemplo JSON:
+
 ```
 json
 {
@@ -289,3 +287,23 @@ $request->validate([
 ]);
 ```
 Este enfoque garantiza que solo se procesen datos válidos y consistentes, reforzando la seguridad y fiabilidad de la API.
+
+---
+
+# 🔐 4. Flujo de Autenticación con Sanctum
+
+1. El usuario se registra o inicia sesión.
+2. El servidor genera un token personal con Sanctum.
+3. El cliente guarda el token.
+4. En cada petición protegida, el cliente envía:
+   Authorization: Bearer TOKEN
+5. Sanctum valida el token.
+6. Si es válido, permite el acceso a Mascotas, Posts y /user.
+
+---
+
+# 🏁 Conclusión
+
+Este proyecto demuestra el uso de Laravel 12 con Sanctum para construir una API REST segura, modular y escalable.  
+Incluye autenticación por token, CRUD completos, validaciones robustas y una arquitectura clara basada en controladores, modelos y middleware.  
+Ideal para prácticas de backend y consumo desde Postman.
